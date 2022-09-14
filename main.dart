@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'tile.dart' show Tile;
-import 'tile_types.dart';
+import 'package:flutter_application_1/action_manager.dart';
+import 'tile_manager.dart';
 
 Future<void> main() async {
   runApp(MaterialApp(
@@ -19,6 +19,7 @@ class HomePageGame extends StatefulWidget {
 class HomePageGameState extends State<HomePageGame> {
   late List<Widget> tiles;
   static const int matriceSize = 4;
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +36,7 @@ class HomePageGameState extends State<HomePageGame> {
         alignment: Alignment.center,
         color: Colors.grey,
         child: GridView.count(
+            key: UniqueKey(),
             shrinkWrap: true,
             padding: const EdgeInsets.all(10),
             crossAxisSpacing: 10,
@@ -56,7 +58,11 @@ class HomePageGameState extends State<HomePageGame> {
             crossAxisCount: 4,
             children: [
               RawMaterialButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    ActionManager.moveGridToLeft(tiles);
+                  });
+                },
                 fillColor: Colors.white,
                 shape: const CircleBorder(),
                 child: const Icon(
@@ -65,7 +71,11 @@ class HomePageGameState extends State<HomePageGame> {
                 ),
               ),
               RawMaterialButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    tiles.shuffle();
+                  });
+                },
                 fillColor: Colors.white,
                 shape: const CircleBorder(),
                 child: const Icon(
@@ -74,7 +84,11 @@ class HomePageGameState extends State<HomePageGame> {
                 ),
               ),
               RawMaterialButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    tiles.shuffle();
+                  });
+                },
                 fillColor: Colors.white,
                 shape: const CircleBorder(),
                 child: const Icon(
@@ -83,7 +97,11 @@ class HomePageGameState extends State<HomePageGame> {
                 ),
               ),
               RawMaterialButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    tiles.shuffle();
+                  });
+                },
                 fillColor: Colors.white,
                 shape: const CircleBorder(),
                 child: const Icon(
@@ -117,49 +135,17 @@ class ColorfulTileState extends State<StatefulColorfulTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
+        key: UniqueKey(),
         color: widget.color,
+        alignment: Alignment.center,
         child: Text(
           widget.strValue,
           textAlign: TextAlign.center,
           style: const TextStyle(
               decoration: TextDecoration.none,
-              fontSize: 60,
+              fontSize: 50,
               color: Colors.black,
               backgroundColor: Colors.transparent),
         ));
-  }
-}
-
-class TileManager {
-  static StatefulColorfulTile _generateTileForInit() {
-    Tile tileRandom = TileTypes.getRandomTileForGen();
-
-    return StatefulColorfulTile(
-        key: UniqueKey(),
-        color: tileRandom.color,
-        value: tileRandom.value,
-        strValue: tileRandom.strValue);
-  }
-
-  static generateInitList() {
-    int initNumberTiles = 2;
-    int numberOfEmptyTiles =
-        (HomePageGameState.matriceSize * HomePageGameState.matriceSize) -
-            initNumberTiles;
-
-    var tilesWithValues = List<Widget>.generate(initNumberTiles, (i) {
-      return _generateTileForInit();
-    });
-
-    var blankTiles = List<Widget>.generate(numberOfEmptyTiles, (i) {
-      return StatefulColorfulTile(
-          key: UniqueKey(), color: Colors.transparent, value: 0, strValue: "");
-    });
-
-    var returnList = tilesWithValues;
-    returnList.addAll(blankTiles);
-    returnList.shuffle();
-
-    return returnList;
   }
 }
