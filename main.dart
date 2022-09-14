@@ -4,19 +4,19 @@ import 'tile_types.dart';
 
 Future<void> main() async {
   runApp(MaterialApp(
-      home: PositionedTiles(
+      home: HomePageGame(
     key: UniqueKey(),
   )));
 }
 
-class PositionedTiles extends StatefulWidget {
-  const PositionedTiles({super.key});
+class HomePageGame extends StatefulWidget {
+  const HomePageGame({super.key});
 
   @override
-  State<StatefulWidget> createState() => PositionedTilesState();
+  State<StatefulWidget> createState() => HomePageGameState();
 }
 
-class PositionedTilesState extends State<PositionedTiles> {
+class HomePageGameState extends State<HomePageGame> {
   late List<Widget> tiles;
   static const int matriceSize = 4;
   @override
@@ -27,23 +27,73 @@ class PositionedTilesState extends State<PositionedTiles> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      const SizedBox(
+        height: 100,
+      ),
+      Container(
         alignment: Alignment.center,
         color: Colors.grey,
-        child: Row(
-          key: UniqueKey(),
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GridView.count(
-                shrinkWrap: true,
-                primary: false,
-                padding: const EdgeInsets.all(10),
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 5,
-                crossAxisCount: matriceSize,
-                children: tiles),
-          ],
-        ));
+        child: GridView.count(
+            shrinkWrap: true,
+            padding: const EdgeInsets.all(10),
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 5,
+            crossAxisCount: matriceSize,
+            children: tiles),
+      ),
+      const SizedBox(
+        height: 30,
+      ),
+      Container(
+        alignment: Alignment.center,
+        color: Colors.yellow,
+        child: GridView.count(
+            shrinkWrap: true,
+            padding: const EdgeInsets.all(10),
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 5,
+            crossAxisCount: 4,
+            children: [
+              RawMaterialButton(
+                onPressed: () {},
+                fillColor: Colors.white,
+                shape: const CircleBorder(),
+                child: const Icon(
+                  Icons.arrow_left,
+                  size: 30,
+                ),
+              ),
+              RawMaterialButton(
+                onPressed: () {},
+                fillColor: Colors.white,
+                shape: const CircleBorder(),
+                child: const Icon(
+                  Icons.arrow_downward,
+                  size: 30,
+                ),
+              ),
+              RawMaterialButton(
+                onPressed: () {},
+                fillColor: Colors.white,
+                shape: const CircleBorder(),
+                child: const Icon(
+                  Icons.arrow_upward,
+                  size: 30,
+                ),
+              ),
+              RawMaterialButton(
+                onPressed: () {},
+                fillColor: Colors.white,
+                shape: const CircleBorder(),
+                child: const Icon(
+                  Icons.arrow_right,
+                  size: 30,
+                ),
+              ),
+            ]),
+      )
+    ]);
   }
 }
 
@@ -94,7 +144,7 @@ class TileManager {
   static generateInitList() {
     int initNumberTiles = 2;
     int numberOfEmptyTiles =
-        (PositionedTilesState.matriceSize * PositionedTilesState.matriceSize) -
+        (HomePageGameState.matriceSize * HomePageGameState.matriceSize) -
             initNumberTiles;
 
     var tilesWithValues = List<Widget>.generate(initNumberTiles, (i) {
