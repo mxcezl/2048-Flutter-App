@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/action_manager.dart';
+import 'action_manager.dart';
 import 'tile_manager.dart';
 
 Future<void> main() async {
