@@ -4,7 +4,7 @@ import 'tile.dart';
 import 'tile_types.dart';
 
 class TileManager {
-  static StatefulColorfulTile _generateTileForInit() {
+  static StatefulColorfulTile generateTileForInit() {
     Tile tileRandom = TileTypes.getRandomTileForGen();
 
     return StatefulColorfulTile(
@@ -15,13 +15,13 @@ class TileManager {
   }
 
   static generateInitList() {
-    int initNumberTiles = 2;
+    int initNumberTiles = 5;
     int numberOfEmptyTiles =
         (HomePageGameState.matriceSize * HomePageGameState.matriceSize) -
             initNumberTiles;
 
     var tilesWithValues = List<Widget>.generate(initNumberTiles, (i) {
-      return _generateTileForInit();
+      return generateTileForInit();
     });
 
     var blankTiles = List<Widget>.generate(numberOfEmptyTiles, (i) {

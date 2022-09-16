@@ -60,7 +60,7 @@ class HomePageGameState extends State<HomePageGame> {
               RawMaterialButton(
                 onPressed: () {
                   setState(() {
-                    ActionManager.moveGridToLeft(tiles);
+                    tiles = ActionManager.performMovement(tiles, "LEFT");
                   });
                 },
                 fillColor: Colors.white,
@@ -73,7 +73,7 @@ class HomePageGameState extends State<HomePageGame> {
               RawMaterialButton(
                 onPressed: () {
                   setState(() {
-                    tiles.shuffle();
+                    tiles = ActionManager.performMovement(tiles, "DOWN");
                   });
                 },
                 fillColor: Colors.white,
@@ -86,7 +86,7 @@ class HomePageGameState extends State<HomePageGame> {
               RawMaterialButton(
                 onPressed: () {
                   setState(() {
-                    tiles.shuffle();
+                    tiles = ActionManager.performMovement(tiles, "UP");
                   });
                 },
                 fillColor: Colors.white,
@@ -99,7 +99,7 @@ class HomePageGameState extends State<HomePageGame> {
               RawMaterialButton(
                 onPressed: () {
                   setState(() {
-                    tiles.shuffle();
+                    tiles = ActionManager.performMovement(tiles, "RIGHT");
                   });
                 },
                 fillColor: Colors.white,

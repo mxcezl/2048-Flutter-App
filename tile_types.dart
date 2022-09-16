@@ -11,6 +11,7 @@ class TileTypes {
   };
 
   static Map<int, Color> tiles = {
+    0: Colors.transparent,
     2: Colors.yellow.shade400,
     4: Colors.yellow.shade600,
     8: Colors.yellow.shade800,
