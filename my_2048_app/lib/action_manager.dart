@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/tile_manager.dart';
-import 'package:flutter_application_1/tile_types.dart';
+import 'tile_manager.dart';
+import 'tile_types.dart';
 import 'main.dart';
 
 class ActionManager {
