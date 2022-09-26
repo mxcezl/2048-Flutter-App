@@ -35,82 +35,44 @@ class HomePageGameState extends State<HomePageGame> {
       Container(
         alignment: Alignment.center,
         color: Colors.grey,
-        child: GridView.count(
-            key: UniqueKey(),
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(10),
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 5,
-            crossAxisCount: matriceSize,
-            children: tiles),
+        child: GestureDetector(
+          onVerticalDragEnd: (details) {
+            if (details.velocity.pixelsPerSecond.dy < -250) {
+              setState(() {
+                tiles = ActionManager.performMovement(tiles, "UP");
+              });
+            } else if (details.velocity.pixelsPerSecond.dy > 250) {
+              setState(() {
+                tiles = ActionManager.performMovement(tiles, "DOWN");
+              });
+            }
+          },
+          onHorizontalDragEnd: (details) {
+            if (details.velocity.pixelsPerSecond.dx < -500) {
+              setState(() {
+                tiles = ActionManager.performMovement(tiles, "LEFT");
+              });
+            } else if (details.velocity.pixelsPerSecond.dx > 500) {
+              setState(() {
+                tiles = ActionManager.performMovement(tiles, "RIGHT");
+              });
+            }
+          },
+          child: GridView.count(
+              key: UniqueKey(),
+              shrinkWrap: true,
+              primary: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(10),
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 5,
+              crossAxisCount: matriceSize,
+              children: tiles),
+        ),
       ),
       const SizedBox(
         height: 30,
       ),
-      Container(
-        alignment: Alignment.center,
-        color: Colors.yellow,
-        child: GridView.count(
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(10),
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 5,
-            crossAxisCount: 4,
-            children: [
-              RawMaterialButton(
-                onPressed: () {
-                  setState(() {
-                    tiles = ActionManager.performMovement(tiles, "LEFT");
-                  });
-                },
-                fillColor: Colors.white,
-                shape: const CircleBorder(),
-                child: const Icon(
-                  Icons.arrow_left,
-                  size: 30,
-                ),
-              ),
-              RawMaterialButton(
-                onPressed: () {
-                  setState(() {
-                    tiles = ActionManager.performMovement(tiles, "DOWN");
-                  });
-                },
-                fillColor: Colors.white,
-                shape: const CircleBorder(),
-                child: const Icon(
-                  Icons.arrow_downward,
-                  size: 30,
-                ),
-              ),
-              RawMaterialButton(
-                onPressed: () {
-                  setState(() {
-                    tiles = ActionManager.performMovement(tiles, "UP");
-                  });
-                },
-                fillColor: Colors.white,
-                shape: const CircleBorder(),
-                child: const Icon(
-                  Icons.arrow_upward,
-                  size: 30,
-                ),
-              ),
-              RawMaterialButton(
-                onPressed: () {
-                  setState(() {
-                    tiles = ActionManager.performMovement(tiles, "RIGHT");
-                  });
-                },
-                fillColor: Colors.white,
-                shape: const CircleBorder(),
-                child: const Icon(
-                  Icons.arrow_right,
-                  size: 30,
-                ),
-              ),
-            ]),
-      )
     ]);
   }
 }
