@@ -52,7 +52,7 @@ class ActionManager {
         break;
     }
     widgetList = widgetMatrix.expand((element) => element).toList();
-    // widgetList = _addTileAfterAMove(widgetList);
+    widgetList = _addTileAfterAMove(widgetList);
     return widgetList;
   }
 
@@ -128,33 +128,18 @@ class ActionManager {
     return columnWidget;
   }
 
-  static void _printMatrix(List<List<StatefulColorfulTile>> tileMatrix) {
-    for (var i = 0; i < tileMatrix.length; i++) {
-      _printLine(tileMatrix[i]);
-    }
-  }
+  static List<Widget> _addTileAfterAMove(List<Widget> widgetList) {
+    List<StatefulColorfulTile> emptyTiles =
+        widgetList.cast<StatefulColorfulTile>();
 
-  static void _printLine(List<StatefulColorfulTile> tileList) {
-    String line = "";
-    for (var i = 0; i < tileList.length; i++) {
-      int value = tileList[i].value;
-      if (value == 0) {
-        line += ". ";
-      } else {
-        line += "${tileList[i].strValue} ";
-      }
-    }
-    print(line);
-  }
-}
+    emptyTiles = emptyTiles.where((tile) => tile.value == 0).toList();
+    emptyTiles.shuffle();
+    StatefulColorfulTile tileToReplace = emptyTiles.first;
 
-List<Widget> _addTileAfterAMove(List<Widget> widgetList) {
-  List<StatefulColorfulTile> emptyTiles =
-      widgetList.cast<StatefulColorfulTile>();
-  emptyTiles.retainWhere((tile) => tile.value == 0);
-  emptyTiles.shuffle();
-  StatefulColorfulTile tileToReplace = emptyTiles.first;
-  int indexToReplace = widgetList.indexOf(tileToReplace);
-  widgetList[indexToReplace] = TileManager.generateTileForInit();
-  return widgetList;
+    int indexToReplace = widgetList.indexOf(tileToReplace);
+
+    widgetList[indexToReplace] = TileManager.generateTileForInit();
+
+    return widgetList;
+  }
 }
