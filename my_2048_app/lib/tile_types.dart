@@ -6,23 +6,23 @@ class TileTypes {
   static Random random = Random();
 
   static Map<int, Color> initTiles = {
-    2: Colors.yellow.shade400,
-    4: Colors.yellow.shade600,
+    2: const Color.fromRGBO(239, 229, 219, 1),
+    4: const Color.fromRGBO(237, 225, 201, 1),
   };
 
   static Map<int, Color> tiles = {
-    0: Colors.transparent,
-    2: Colors.yellow.shade400,
-    4: Colors.yellow.shade600,
-    8: Colors.yellow.shade800,
-    16: Colors.orange.shade400,
-    32: Colors.orange.shade600,
-    64: Colors.orange.shade800,
-    128: Colors.orange.shade900,
-    256: Colors.red.shade400,
-    512: Colors.red.shade600,
-    1024: Colors.red.shade800,
-    2048: Colors.greenAccent,
+    0: const Color.fromRGBO(205, 193, 179, 1),
+    2: initTiles[2]!,
+    4: initTiles[4]!,
+    8: const Color.fromRGBO(243, 178, 122, 1),
+    16: const Color.fromRGBO(246, 150, 100, 1),
+    32: const Color.fromRGBO(244, 125, 98, 1),
+    64: const Color.fromRGBO(244, 95, 62, 1),
+    128: const Color.fromRGBO(238, 206, 116, 1),
+    256: const Color.fromRGBO(238, 203, 98, 1),
+    512: const Color.fromRGBO(238, 199, 82, 1),
+    1024: const Color.fromRGBO(238, 196, 66, 1),
+    2048: const Color.fromRGBO(239, 193, 47, 1),
   };
 
   static Tile getRandomTileForGen() {

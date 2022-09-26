@@ -15,7 +15,7 @@ class TileManager {
   }
 
   static generateInitList() {
-    int initNumberTiles = 5;
+    int initNumberTiles = 2;
     int numberOfEmptyTiles =
         (HomePageGameState.matriceSize * HomePageGameState.matriceSize) -
             initNumberTiles;
@@ -26,7 +26,7 @@ class TileManager {
 
     var blankTiles = List<Widget>.generate(numberOfEmptyTiles, (i) {
       return StatefulColorfulTile(
-          key: UniqueKey(), color: Colors.transparent, value: 0, strValue: "");
+          key: UniqueKey(), color: TileTypes.tiles[0]!, value: 0, strValue: "");
     });
 
     var returnList = tilesWithValues;

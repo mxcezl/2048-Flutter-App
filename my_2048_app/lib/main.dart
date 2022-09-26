@@ -4,9 +4,10 @@ import 'tile_manager.dart';
 
 Future<void> main() async {
   runApp(MaterialApp(
+      title: '2048',
       home: HomePageGame(
-    key: UniqueKey(),
-  )));
+        key: UniqueKey(),
+      )));
 }
 
 class HomePageGame extends StatefulWidget {
@@ -28,52 +29,55 @@ class HomePageGameState extends State<HomePageGame> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-      const SizedBox(
-        height: 100,
-      ),
-      Container(
+    int sensitivity = 250;
+    double width = MediaQuery.of(context).size.width;
+    width = width - (width * 0.05);
+    return Container(
+        color: const Color.fromRGBO(252, 249, 240, 1),
         alignment: Alignment.center,
-        color: Colors.grey,
-        child: GestureDetector(
-          onVerticalDragEnd: (details) {
-            if (details.velocity.pixelsPerSecond.dy < -250) {
-              setState(() {
-                tiles = ActionManager.performMovement(tiles, "UP");
-              });
-            } else if (details.velocity.pixelsPerSecond.dy > 250) {
-              setState(() {
-                tiles = ActionManager.performMovement(tiles, "DOWN");
-              });
-            }
-          },
-          onHorizontalDragEnd: (details) {
-            if (details.velocity.pixelsPerSecond.dx < -500) {
-              setState(() {
-                tiles = ActionManager.performMovement(tiles, "LEFT");
-              });
-            } else if (details.velocity.pixelsPerSecond.dx > 500) {
-              setState(() {
-                tiles = ActionManager.performMovement(tiles, "RIGHT");
-              });
-            }
-          },
-          child: GridView.count(
-              key: UniqueKey(),
-              shrinkWrap: true,
-              primary: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(10),
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 5,
-              crossAxisCount: matriceSize,
-              children: tiles),
-        ),
-      ),
-      const SizedBox(
-        height: 30,
-      ),
-    ]);
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+          child: Container(
+            height: width,
+            width: width,
+            alignment: Alignment.center,
+            color: const Color.fromRGBO(187, 173, 160, 1),
+            child: GestureDetector(
+              onVerticalDragEnd: (details) {
+                if (details.velocity.pixelsPerSecond.dy < -sensitivity) {
+                  setState(() {
+                    tiles = ActionManager.performMovement(tiles, "UP");
+                  });
+                } else if (details.velocity.pixelsPerSecond.dy > sensitivity) {
+                  setState(() {
+                    tiles = ActionManager.performMovement(tiles, "DOWN");
+                  });
+                }
+              },
+              onHorizontalDragEnd: (details) {
+                if (details.velocity.pixelsPerSecond.dx < -sensitivity) {
+                  setState(() {
+                    tiles = ActionManager.performMovement(tiles, "LEFT");
+                  });
+                } else if (details.velocity.pixelsPerSecond.dx > sensitivity) {
+                  setState(() {
+                    tiles = ActionManager.performMovement(tiles, "RIGHT");
+                  });
+                }
+              },
+              child: GridView.count(
+                  key: UniqueKey(),
+                  shrinkWrap: true,
+                  primary: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(10),
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  crossAxisCount: matriceSize,
+                  children: tiles),
+            ),
+          ),
+        ));
   }
 }
 
@@ -96,18 +100,20 @@ class StatefulColorfulTile extends StatefulWidget {
 class ColorfulTileState extends State<StatefulColorfulTile> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        key: UniqueKey(),
-        color: widget.color,
-        alignment: Alignment.center,
-        child: Text(
-          widget.strValue,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-              decoration: TextDecoration.none,
-              fontSize: 50,
-              color: Colors.black,
-              backgroundColor: Colors.transparent),
-        ));
+    return ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        child: Container(
+            key: UniqueKey(),
+            color: widget.color,
+            alignment: Alignment.center,
+            child: Text(
+              widget.strValue,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                  decoration: TextDecoration.none,
+                  fontSize: 50,
+                  color: Colors.black,
+                  backgroundColor: Colors.transparent),
+            )));
   }
 }
