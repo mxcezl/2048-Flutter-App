@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'tile.dart';
 
 class TileTypes {
+  // for random choice of tiles
   static Random random = Random();
 
+  // tiles that exists in game
   static Map<int, Color> tiles = {
     0: const Color.fromRGBO(205, 193, 179, 1),
     2: const Color.fromRGBO(239, 229, 219, 1),
@@ -20,12 +22,14 @@ class TileTypes {
     2048: const Color.fromRGBO(239, 193, 47, 1),
   };
 
-  // static function that returns a subset of the tiles map composed of values 2 and 4
+  // static function that returns a subset of the tiles map
+  // composed of tiles values 2 and 4
   static Map<int, Color> getInitTiles() {
     return Map.fromEntries(
-        tiles.entries.where((element) => element.key == 2 || element.key == 4));
+        tiles.entries.where((tile) => tile.key == 2 || tile.key == 4));
   }
 
+  // function that generates random tiles from the tiles map
   static Tile getRandomTileForGen() {
     int generatedIndex = random.nextInt(getInitTiles().length);
     int valueFound = getInitTiles().keys.elementAt(generatedIndex);

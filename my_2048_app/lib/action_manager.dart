@@ -7,6 +7,10 @@ import 'main.dart';
 import 'constants.dart' as Constants;
 
 class ActionManager {
+  /// This function is called when the user swipe the screen.
+  /// It will move the tiles in the direction of the swipe
+  /// and add a new tile if possible.
+  /// This function also check if the game is ended and save the score.
   static GridMovedResult performMovement(
       List<Widget> widgetList, String direction) {
     List<List<StatefulColorfulTile>> widgetMatrix =
@@ -84,6 +88,8 @@ class ActionManager {
     return GridMovedResult(score, widgetList);
   }
 
+  /// Function that takes a list of tile and move them while performing a merge
+  /// if possible.
   static GridMovedResult moveTilesInGrid(
       List<StatefulColorfulTile> widgetList) {
     int score = 0;
@@ -108,12 +114,11 @@ class ActionManager {
             if (mustMerge) {
               resultValue += mergeTile.value;
               widgetList[indexTileToMerge] = StatefulColorfulTile.emptyTile(
-                  widgetList[indexTileToMerge].key!, TileTypes.tiles[0]!);
+                  widgetList[indexTileToMerge].key!);
               score += resultValue;
             }
 
-            widgetList[j] = StatefulColorfulTile.emptyTile(
-                widgetList[j].key!, TileTypes.tiles[0]!);
+            widgetList[j] = StatefulColorfulTile.emptyTile(widgetList[j].key!);
 
             widgetList[i] = StatefulColorfulTile(
                 key: widgetList[i].key,
@@ -128,6 +133,7 @@ class ActionManager {
     return GridMovedResult(score, widgetList);
   }
 
+  /// Converts a list of widgets to a matrix of widgets.
   static List<List<StatefulColorfulTile>> _convertListWidgetToMatrix(
       List<StatefulColorfulTile> widgetList) {
     List<List<StatefulColorfulTile>> tileMatrix = [];
@@ -140,6 +146,7 @@ class ActionManager {
     return tileMatrix;
   }
 
+  /// Returns column at index [index] from a widget matrix.
   static List<StatefulColorfulTile> _getColumnByIndex(
       int index, List<List<StatefulColorfulTile>> matrix) {
     List<StatefulColorfulTile> columnWidget = [];
@@ -149,18 +156,71 @@ class ActionManager {
     return columnWidget;
   }
 
+  /// Function that adds a tile to the grid after a move if possible
+  /// and returns the new list of tiles.
   static List<Widget> _addTileAfterAMove(List<Widget> widgetList) {
-    List<StatefulColorfulTile> emptyTiles =
+    List<StatefulColorfulTile> widgetListCasted =
         widgetList.cast<StatefulColorfulTile>();
 
-    emptyTiles = emptyTiles.where((tile) => tile.value == 0).toList();
+    List<StatefulColorfulTile> emptyTiles = getEmptyTiles(widgetListCasted);
     emptyTiles.shuffle();
-    StatefulColorfulTile tileToReplace = emptyTiles.first;
 
-    int indexToReplace = widgetList.indexOf(tileToReplace);
+    // not empty && changed grid
+    if (emptyTiles.isNotEmpty) {
+      StatefulColorfulTile tileToReplace = emptyTiles.first;
+      int indexTileToReplace = widgetListCasted.indexOf(tileToReplace);
+      widgetList[indexTileToReplace] = TileManager.generateTileForInit();
+    }
 
-    widgetList[indexToReplace] = TileManager.generateTileForInit();
+    if (gameEnd(widgetList)) {
+      print("Game Over");
+      // Show pop-up
+      // Save the score if best score
+      // Restart game
+    }
 
     return widgetList;
+  }
+
+  /// Function that returns all the empty tiles in the grid.
+  static List<StatefulColorfulTile> getEmptyTiles(
+      List<StatefulColorfulTile> widgetList) {
+    return widgetList.where((tile) => tile.value == 0).toList();
+  }
+
+  /// Function that returns true if the game is over and lase otherwise.
+  /// The game is over if there are no empty tiles and no possible moves.
+  static bool gameEnd(List<Widget> widgetList) {
+    List<StatefulColorfulTile> widgetListCasted =
+        widgetList.cast<StatefulColorfulTile>();
+
+    List<StatefulColorfulTile> emptyTiles = getEmptyTiles(widgetListCasted);
+    if (emptyTiles.isNotEmpty) {
+      return false;
+    }
+
+    return !checkIfMergePossible(_convertListWidgetToMatrix(widgetListCasted));
+  }
+
+  /// Function that returns true if a merge is possible in the grid false otherwise.
+  /// A merge is possible if two tiles with the same value are next to each other
+  /// in the same row or column.
+  static bool checkIfMergePossible(
+      List<List<StatefulColorfulTile>> widgetMatrix) {
+    for (int i = 0; i < widgetMatrix.length; i++) {
+      for (int j = 0; j < widgetMatrix[i].length; j++) {
+        if (i < widgetMatrix.length - 1) {
+          if (widgetMatrix[i][j].value == widgetMatrix[i + 1][j].value) {
+            return true;
+          }
+        }
+        if (j < widgetMatrix[i].length - 1) {
+          if (widgetMatrix[i][j].value == widgetMatrix[i][j + 1].value) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 }

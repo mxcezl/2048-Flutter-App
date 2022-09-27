@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_2048_app/grid_moved_result.dart';
+import 'package:my_2048_app/tile_types.dart';
 import 'action_manager.dart';
 import 'tile_manager.dart';
+import 'constants.dart' as Constants;
 
 Future<void> main() async {
   runApp(MaterialApp(
@@ -23,6 +25,7 @@ class HomePageGameState extends State<HomePageGame> {
   late List<Widget> tiles;
   static const int matriceSize = 4;
   int score = 0;
+  int best_score = 0;
 
   @override
   void initState() {
@@ -34,12 +37,12 @@ class HomePageGameState extends State<HomePageGame> {
   Widget build(BuildContext context) {
     int sensitivity = 250;
     double width = MediaQuery.of(context).size.width;
-    width = width - (width * 0.05);
+    width = width - (width * 0.07);
     return Container(
         color: const Color.fromRGBO(252, 249, 240, 1),
         alignment: Alignment.center,
         child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+            borderRadius: const BorderRadius.all(Radius.circular(50.0)),
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text(
@@ -52,7 +55,7 @@ class HomePageGameState extends State<HomePageGame> {
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.05,
+                height: MediaQuery.of(context).size.height * 0.03,
               ),
               Container(
                 height: width,
@@ -64,15 +67,15 @@ class HomePageGameState extends State<HomePageGame> {
                     if (details.velocity.pixelsPerSecond.dy < -sensitivity) {
                       setState(() {
                         GridMovedResult result =
-                            ActionManager.performMovement(tiles, "UP");
+                            ActionManager.performMovement(tiles, Constants.UP);
                         tiles = result.tiles;
                         score += result.score;
                       });
                     } else if (details.velocity.pixelsPerSecond.dy >
                         sensitivity) {
                       setState(() {
-                        GridMovedResult result =
-                            ActionManager.performMovement(tiles, "DOWN");
+                        GridMovedResult result = ActionManager.performMovement(
+                            tiles, Constants.DOWN);
                         tiles = result.tiles;
                         score += result.score;
                       });
@@ -81,16 +84,16 @@ class HomePageGameState extends State<HomePageGame> {
                   onHorizontalDragEnd: (details) {
                     if (details.velocity.pixelsPerSecond.dx < -sensitivity) {
                       setState(() {
-                        GridMovedResult result =
-                            ActionManager.performMovement(tiles, "LEFT");
+                        GridMovedResult result = ActionManager.performMovement(
+                            tiles, Constants.LEFT);
                         tiles = result.tiles;
                         score += result.score;
                       });
                     } else if (details.velocity.pixelsPerSecond.dx >
                         sensitivity) {
                       setState(() {
-                        GridMovedResult result =
-                            ActionManager.performMovement(tiles, "RIGHT");
+                        GridMovedResult result = ActionManager.performMovement(
+                            tiles, Constants.RIGHT);
                         tiles = result.tiles;
                         score += result.score;
                       });
@@ -108,10 +111,17 @@ class HomePageGameState extends State<HomePageGame> {
                       children: tiles),
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  Text("Meilleur score : ${best_score.toString()}",
+                      style: const TextStyle(
+                        color: Color.fromRGBO(119, 110, 101, 1),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.none,
+                      )),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromRGBO(187, 173, 160, 1),
@@ -126,8 +136,6 @@ class HomePageGameState extends State<HomePageGame> {
                         });
                       },
                       child: const Text("Restart")),
-                  SizedBox(
-                      width: (MediaQuery.of(context).size.width - width) / 2),
                 ],
               ),
             ])));
@@ -149,10 +157,18 @@ class StatefulColorfulTile extends StatefulWidget {
   @override
   ColorfulTileState createState() => ColorfulTileState();
 
-  static StatefulColorfulTile emptyTile(Key key, Color color) {
+  static StatefulColorfulTile fromValueTile(int value) {
+    return StatefulColorfulTile(
+        key: UniqueKey(),
+        color: TileTypes.tiles[value]!,
+        value: value,
+        strValue: value.toString());
+  }
+
+  static StatefulColorfulTile emptyTile(Key key) {
     return StatefulColorfulTile(
       key: key,
-      color: color,
+      color: TileTypes.tiles[0]!,
       value: 0,
       strValue: "",
     );

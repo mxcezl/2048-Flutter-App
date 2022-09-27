@@ -14,22 +14,23 @@ class TileManager {
         strValue: tileRandom.strValue);
   }
 
+  // function that returns a list of tiles
+  // for initialization of the game
   static generateInitList() {
     int initNumberTiles = 2;
     int numberOfEmptyTiles =
         (HomePageGameState.matriceSize * HomePageGameState.matriceSize) -
             initNumberTiles;
 
-    var tilesWithValues = List<Widget>.generate(initNumberTiles, (i) {
+    List<Widget> tilesWithValues = List<Widget>.generate(initNumberTiles, (i) {
       return generateTileForInit();
     });
 
-    var blankTiles = List<Widget>.generate(numberOfEmptyTiles, (i) {
-      return StatefulColorfulTile(
-          key: UniqueKey(), color: TileTypes.tiles[0]!, value: 0, strValue: "");
+    List<Widget> blankTiles = List<Widget>.generate(numberOfEmptyTiles, (i) {
+      return StatefulColorfulTile.emptyTile(UniqueKey());
     });
 
-    var returnList = tilesWithValues;
+    List<Widget> returnList = tilesWithValues;
     returnList.addAll(blankTiles);
     returnList.shuffle();
 
