@@ -33,6 +33,26 @@ class HomePageGameState extends State<HomePageGame> {
     tiles = TileManager.generateInitList();
   }
 
+  /// This function is called when the user swipe the screen.
+  /// It will move the tiles in the direction of the swipe
+  /// and add a new tile if possible.
+  void _onSwipe(String direction) {
+    GridMovedResult result = ActionManager.performMovement(tiles, direction);
+    if (result.isGameEnded) {
+      _showEndGameDialog();
+    }
+
+    if (result.isGridChanged) {
+      setState(() {
+        tiles = result.tiles;
+        score += result.score;
+        if (score > best_score) {
+          best_score = score;
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     int sensitivity = 250;
@@ -65,38 +85,18 @@ class HomePageGameState extends State<HomePageGame> {
                 child: GestureDetector(
                   onVerticalDragEnd: (details) {
                     if (details.velocity.pixelsPerSecond.dy < -sensitivity) {
-                      setState(() {
-                        GridMovedResult result =
-                            ActionManager.performMovement(tiles, Constants.UP);
-                        tiles = result.tiles;
-                        score += result.score;
-                      });
+                      _onSwipe(Constants.UP);
                     } else if (details.velocity.pixelsPerSecond.dy >
                         sensitivity) {
-                      setState(() {
-                        GridMovedResult result = ActionManager.performMovement(
-                            tiles, Constants.DOWN);
-                        tiles = result.tiles;
-                        score += result.score;
-                      });
+                      _onSwipe(Constants.DOWN);
                     }
                   },
                   onHorizontalDragEnd: (details) {
                     if (details.velocity.pixelsPerSecond.dx < -sensitivity) {
-                      setState(() {
-                        GridMovedResult result = ActionManager.performMovement(
-                            tiles, Constants.LEFT);
-                        tiles = result.tiles;
-                        score += result.score;
-                      });
+                      _onSwipe(Constants.LEFT);
                     } else if (details.velocity.pixelsPerSecond.dx >
                         sensitivity) {
-                      setState(() {
-                        GridMovedResult result = ActionManager.performMovement(
-                            tiles, Constants.RIGHT);
-                        tiles = result.tiles;
-                        score += result.score;
-                      });
+                      _onSwipe(Constants.RIGHT);
                     }
                   },
                   child: GridView.count(
@@ -139,6 +139,28 @@ class HomePageGameState extends State<HomePageGame> {
                 ],
               ),
             ])));
+  }
+
+  void _showEndGameDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Game Over"),
+            content: Text("Votre score est de ${score.toString()}"),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    setState(() {
+                      score = 0;
+                      tiles = TileManager.generateInitList();
+                    });
+                  },
+                  child: const Text("OK"))
+            ],
+          );
+        });
   }
 }
 

@@ -24,20 +24,23 @@ class TileTypes {
     8192: const Color.fromRGBO(252, 31, 32, 1),
   };
 
-  // static function that returns a subset of the tiles map
-  // composed of tiles values 2 and 4
+  /// function that returns a subset of the tiles map
+  /// composed of tiles values 2 and 4 for the initialization.
   static Map<int, Color> getInitTiles() {
     return Map.fromEntries(
         tiles.entries.where((tile) => tile.key == 2 || tile.key == 4));
   }
 
-  // function that generates random tiles from the tiles map
+  /// function that generates random tiles from the tiles map
+  /// for the initialization of the game (only 2, 4 and empty tiles).
   static Tile getRandomTileForGen() {
     int generatedIndex = random.nextInt(getInitTiles().length);
-    int valueFound = getInitTiles().keys.elementAt(generatedIndex);
-    Color colorFound = getInitTiles()[valueFound]!;
+    int randomValueFound = getInitTiles().keys.elementAt(generatedIndex);
+    Color randomColorFound = getInitTiles()[randomValueFound]!;
 
     return Tile(
-        color: colorFound, value: valueFound, strValue: valueFound.toString());
+        color: randomColorFound,
+        value: randomValueFound,
+        strValue: randomValueFound.toString());
   }
 }

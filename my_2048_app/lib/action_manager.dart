@@ -4,6 +4,8 @@ import 'grid_moved_result.dart';
 import 'tile_manager.dart';
 import 'tile_types.dart';
 import 'main.dart';
+
+// ignore: library_prefixes
 import 'constants.dart' as Constants;
 
 class ActionManager {
@@ -13,6 +15,7 @@ class ActionManager {
   /// This function also check if the game is ended and save the score.
   static GridMovedResult performMovement(
       List<Widget> widgetList, String direction) {
+    int gridHash = _getGridHash(widgetList);
     List<List<StatefulColorfulTile>> widgetMatrix =
         _convertListWidgetToMatrix(widgetList.cast<StatefulColorfulTile>());
     int score = 0;
@@ -84,8 +87,14 @@ class ActionManager {
         break;
     }
     widgetList = widgetMatrix.expand((element) => element).toList();
-    widgetList = _addTileAfterAMove(widgetList);
-    return GridMovedResult(score, widgetList);
+
+    bool isGameChanged = gridHash != _getGridHash(widgetList);
+    if (isGameChanged) {
+      widgetList = _addTileAfterAMove(widgetList);
+    }
+
+    return GridMovedResult(
+        score, widgetList, isGameChanged, _isGameEnd(widgetList));
   }
 
   /// Function that takes a list of tile and move them while performing a merge
@@ -130,7 +139,7 @@ class ActionManager {
         }
       }
     }
-    return GridMovedResult(score, widgetList);
+    return GridMovedResult.resultAfterMove(score, widgetList);
   }
 
   /// Converts a list of widgets to a matrix of widgets.
@@ -172,8 +181,7 @@ class ActionManager {
       widgetList[indexTileToReplace] = TileManager.generateTileForInit();
     }
 
-    if (gameEnd(widgetList)) {
-      print("Game Over");
+    if (_isGameEnd(widgetList)) {
       // Show pop-up
       // Save the score if best score
       // Restart game
@@ -190,7 +198,7 @@ class ActionManager {
 
   /// Function that returns true if the game is over and lase otherwise.
   /// The game is over if there are no empty tiles and no possible moves.
-  static bool gameEnd(List<Widget> widgetList) {
+  static bool _isGameEnd(List<Widget> widgetList) {
     List<StatefulColorfulTile> widgetListCasted =
         widgetList.cast<StatefulColorfulTile>();
 
@@ -199,13 +207,13 @@ class ActionManager {
       return false;
     }
 
-    return !checkIfMergePossible(_convertListWidgetToMatrix(widgetListCasted));
+    return !_checkIfMergePossible(_convertListWidgetToMatrix(widgetListCasted));
   }
 
   /// Function that returns true if a merge is possible in the grid false otherwise.
   /// A merge is possible if two tiles with the same value are next to each other
   /// in the same row or column.
-  static bool checkIfMergePossible(
+  static bool _checkIfMergePossible(
       List<List<StatefulColorfulTile>> widgetMatrix) {
     for (int i = 0; i < widgetMatrix.length; i++) {
       for (int j = 0; j < widgetMatrix[i].length; j++) {
@@ -222,5 +230,31 @@ class ActionManager {
       }
     }
     return false;
+  }
+
+  /// Function that returns a list of tiles as a string.
+  static String _listWidgetToString(List<Widget> widgetList) {
+    List<StatefulColorfulTile> widgetListCasted =
+        widgetList.cast<StatefulColorfulTile>();
+    String str = "";
+    for (var i = 0; i < widgetListCasted.length; i++) {
+      str += "${widgetListCasted[i].value} ";
+    }
+    return str;
+  }
+
+  /// Function that generates a unique hash from a string.
+  static int _generateHashFromString(String str) {
+    int hash = 0;
+    for (int i = 0; i < str.length; i++) {
+      hash = 31 * hash + str.codeUnitAt(i);
+    }
+    return hash;
+  }
+
+  /// Function that returns a hash of the current grid.
+  /// The hash is used to check if the grid has changed after a move.
+  static int _getGridHash(List<Widget> widgetList) {
+    return _generateHashFromString(_listWidgetToString(widgetList));
   }
 }
