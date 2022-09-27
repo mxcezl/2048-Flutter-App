@@ -1,49 +1,77 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'grid_moved_result.dart';
 import 'tile_manager.dart';
 import 'tile_types.dart';
 import 'main.dart';
+import 'constants.dart' as Constants;
 
 class ActionManager {
-  static List<Widget> performMovement(
+  static GridMovedResult performMovement(
       List<Widget> widgetList, String direction) {
     List<List<StatefulColorfulTile>> widgetMatrix =
         _convertListWidgetToMatrix(widgetList.cast<StatefulColorfulTile>());
-
+    int score = 0;
     switch (direction) {
-      case "LEFT":
+      case Constants.LEFT:
         {
+          if (kDebugMode) {
+            print(Constants.LEFT);
+          }
           for (var line in widgetMatrix) {
-            line = moveTilesInGrid(line);
+            GridMovedResult result = moveTilesInGrid(line);
+            line = result.tiles.cast<StatefulColorfulTile>();
+            score += result.score;
           }
         }
         break;
-      case "RIGHT":
+      case Constants.RIGHT:
         {
+          if (kDebugMode) {
+            print(Constants.RIGHT);
+          }
           int i = 0;
           for (var line in widgetMatrix.map((e) => e.reversed.toList())) {
-            widgetMatrix[i] = moveTilesInGrid(line).reversed.toList();
+            GridMovedResult result = moveTilesInGrid(line);
+            widgetMatrix[i] =
+                result.tiles.cast<StatefulColorfulTile>().reversed.toList();
+            score += result.score;
             i++;
           }
         }
         break;
-      case "UP":
+      case Constants.UP:
         {
+          if (kDebugMode) {
+            print(Constants.UP);
+          }
           for (int i = 0; i < widgetMatrix.length; i++) {
             List<StatefulColorfulTile> columnIndexI =
                 _getColumnByIndex(i, widgetMatrix);
-            columnIndexI = moveTilesInGrid(columnIndexI);
+            GridMovedResult result = moveTilesInGrid(columnIndexI);
+            score += result.score;
+            columnIndexI = result.tiles.cast<StatefulColorfulTile>();
+
             for (int j = 0; j < columnIndexI.length; j++) {
               widgetMatrix[j][i] = columnIndexI[j];
             }
           }
         }
         break;
-      case "DOWN":
+      case Constants.DOWN:
         {
+          if (kDebugMode) {
+            print(Constants.DOWN);
+          }
           for (int i = 0; i < widgetMatrix.length; i++) {
             List<StatefulColorfulTile> columnIndexI =
                 _getColumnByIndex(i, widgetMatrix).reversed.toList();
-            columnIndexI = moveTilesInGrid(columnIndexI).reversed.toList();
+
+            GridMovedResult result = moveTilesInGrid(columnIndexI);
+            score += result.score;
+            columnIndexI =
+                result.tiles.cast<StatefulColorfulTile>().reversed.toList();
+
             for (int j = 0; j < columnIndexI.length; j++) {
               widgetMatrix[j][i] = columnIndexI[j];
             }
@@ -53,21 +81,18 @@ class ActionManager {
     }
     widgetList = widgetMatrix.expand((element) => element).toList();
     widgetList = _addTileAfterAMove(widgetList);
-    return widgetList;
+    return GridMovedResult(score, widgetList);
   }
 
-  static List<StatefulColorfulTile> moveTilesInGrid(
+  static GridMovedResult moveTilesInGrid(
       List<StatefulColorfulTile> widgetList) {
+    int score = 0;
     for (int i = 0; i < widgetList.length; i++) {
       for (int j = i; j < widgetList.length; j++) {
         if (widgetList[j].value != 0) {
-          StatefulColorfulTile mergeTile =
-              widgetList.skip(j + 1).firstWhere((t) => t.value != 0,
-                  orElse: () => const StatefulColorfulTile(
-                        color: Colors.transparent,
-                        value: 99,
-                        strValue: "",
-                      ));
+          StatefulColorfulTile mergeTile = widgetList.skip(j + 1).firstWhere(
+              (t) => t.value != 0,
+              orElse: () => Constants.TILE_NOT_FOUND);
 
           int indexTileToMerge = widgetList.indexOf(mergeTile);
           bool foundOtherTile = false;
@@ -82,18 +107,14 @@ class ActionManager {
             int resultValue = widgetList[j].value;
             if (mustMerge) {
               resultValue += mergeTile.value;
-              widgetList[indexTileToMerge] = StatefulColorfulTile(
-                  key: widgetList[indexTileToMerge].key,
-                  color: TileTypes.tiles[0]!,
-                  value: 0,
-                  strValue: "");
+              widgetList[indexTileToMerge] = StatefulColorfulTile.emptyTile(
+                  widgetList[indexTileToMerge].key!, TileTypes.tiles[0]!);
+              score += resultValue;
             }
 
-            widgetList[j] = StatefulColorfulTile(
-                key: widgetList[j].key,
-                color: TileTypes.tiles[0]!,
-                value: 0,
-                strValue: "");
+            widgetList[j] = StatefulColorfulTile.emptyTile(
+                widgetList[j].key!, TileTypes.tiles[0]!);
+
             widgetList[i] = StatefulColorfulTile(
                 key: widgetList[i].key,
                 color: TileTypes.tiles[resultValue]!,
@@ -104,7 +125,7 @@ class ActionManager {
         }
       }
     }
-    return widgetList;
+    return GridMovedResult(score, widgetList);
   }
 
   static List<List<StatefulColorfulTile>> _convertListWidgetToMatrix(
