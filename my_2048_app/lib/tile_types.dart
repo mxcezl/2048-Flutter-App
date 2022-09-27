@@ -20,6 +20,8 @@ class TileTypes {
     512: const Color.fromRGBO(238, 199, 82, 1),
     1024: const Color.fromRGBO(238, 196, 66, 1),
     2048: const Color.fromRGBO(239, 193, 47, 1),
+    4096: const Color.fromRGBO(253, 62, 62, 1),
+    8192: const Color.fromRGBO(252, 31, 32, 1),
   };
 
   // static function that returns a subset of the tiles map
