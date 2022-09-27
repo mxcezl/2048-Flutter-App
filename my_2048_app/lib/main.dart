@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_2048_app/grid_moved_result.dart';
 import 'package:my_2048_app/tile_types.dart';
 import 'action_manager.dart';
 import 'tile_manager.dart';
+
+// ignore: library_prefixes
 import 'constants.dart' as Constants;
 
 Future<void> main() async {
@@ -25,7 +28,7 @@ class HomePageGameState extends State<HomePageGame> {
   late List<Widget> tiles;
   static const int matriceSize = 4;
   int score = 0;
-  int best_score = 0;
+  int bestScore = 0;
 
   @override
   void initState() {
@@ -46,8 +49,8 @@ class HomePageGameState extends State<HomePageGame> {
       setState(() {
         tiles = result.tiles;
         score += result.score;
-        if (score > best_score) {
-          best_score = score;
+        if (score > bestScore) {
+          bestScore = score;
         }
       });
     }
@@ -58,6 +61,13 @@ class HomePageGameState extends State<HomePageGame> {
     int sensitivity = 250;
     double width = MediaQuery.of(context).size.width;
     width = width - (width * 0.07);
+
+    // Avoid the screen to rotate
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     return Container(
         color: const Color.fromRGBO(252, 249, 240, 1),
         alignment: Alignment.center,
@@ -115,10 +125,10 @@ class HomePageGameState extends State<HomePageGame> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text("Meilleur score : ${best_score.toString()}",
+                  Text("Meilleur score : ${bestScore.toString()}",
                       style: const TextStyle(
                         color: Color.fromRGBO(119, 110, 101, 1),
-                        fontSize: 20,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                         decoration: TextDecoration.none,
                       )),
@@ -135,19 +145,25 @@ class HomePageGameState extends State<HomePageGame> {
                           tiles = TileManager.generateInitList();
                         });
                       },
-                      child: const Text("Restart")),
+                      child: const Text("Recommencer")),
                 ],
               ),
             ])));
   }
 
   void _showEndGameDialog() {
+    late String endText;
+    if (score == bestScore) {
+      endText = "Nouveau meilleur score : ${score.toString()} !";
+    } else {
+      endText = "Votre score est de ${score.toString()}.";
+    }
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text("Game Over"),
-            content: Text("Votre score est de ${score.toString()}"),
+            title: const Text("Game Over !"),
+            content: Text(endText),
             actions: [
               TextButton(
                   onPressed: () {
@@ -157,7 +173,7 @@ class HomePageGameState extends State<HomePageGame> {
                       tiles = TileManager.generateInitList();
                     });
                   },
-                  child: const Text("OK"))
+                  child: const Text("Recommencer"))
             ],
           );
         });
