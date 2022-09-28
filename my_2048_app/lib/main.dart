@@ -41,9 +41,6 @@ class HomePageGameState extends State<HomePageGame> {
   /// and add a new tile if possible.
   void _onSwipe(String direction) {
     GridMovedResult result = ActionManager.performMovement(tiles, direction);
-    if (result.isGameEnded) {
-      _showEndGameDialog();
-    }
 
     if (result.isGridChanged) {
       setState(() {
@@ -53,6 +50,10 @@ class HomePageGameState extends State<HomePageGame> {
           bestScore = score;
         }
       });
+    }
+
+    if (result.isGameEnded) {
+      _showEndGameDialog();
     }
   }
 
