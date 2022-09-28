@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'dart:math' show Random;
 import 'tile.dart';
 
+/// This class generates and validates everything related to the tiles.
 class TileTypes {
-  // for random choice of tiles
+  /// For random choice of tiles.
   static Random random = Random();
 
-  // tiles that exists in game
+  /// Non exhaustive list of tiles that exists in game.
   static Map<int, Color> tiles = {
     0: const Color.fromRGBO(205, 193, 179, 1),
     2: const Color.fromRGBO(239, 229, 219, 1),
@@ -24,36 +25,37 @@ class TileTypes {
     8192: const Color.fromRGBO(252, 31, 32, 1),
   };
 
-  /// function that returns a subset of the tiles map
+  /// Function that returns a subset of the tiles map
   /// composed of tiles values 2 and 4 for the initialization.
   static Map<int, Color> getInitTiles() {
     return Map.fromEntries(
         tiles.entries.where((tile) => tile.key == 2 || tile.key == 4));
   }
 
-  /// function that generates random tiles from the tiles map
+  /// Function that generates random tiles from the tiles map
   /// for the initialization of the game (only 2, 4 and empty tiles).
   static Tile getRandomTileForGen() {
-    int generatedIndex = random.nextInt(getInitTiles().length);
-    int randomValueFound = getInitTiles().keys.elementAt(generatedIndex);
-    Color randomColorFound = getInitTiles()[randomValueFound]!;
+    int randomTileIndex = random.nextInt(getInitTiles().length);
+    int randomTileValue = getInitTiles().keys.elementAt(randomTileIndex);
+    Color randomTileColor = getInitTiles()[randomTileValue]!;
 
+    // Returns the tile with the given random value.
     return Tile(
-        color: randomColorFound,
-        value: randomValueFound,
-        strValue: randomValueFound.toString());
+        color: randomTileColor,
+        value: randomTileValue,
+        strValue: randomTileValue.toString());
   }
 
   /// Function that returns true if the tile value exists in tiles possible
   /// values and false otherwise.
   /// This function is used to check if the tile value is valid.
-  static bool isTileValueValid(int value) {
+  static bool isTileInPresets(int value) {
     return tiles.containsKey(value);
   }
 
   /// Function that returns true if the value is a power of 2 and false otherwise.
   /// This function is used to check if the tile value is valid in the game.
-  static bool isValueValid(int value) {
+  static bool isValueValidForTile(int value) {
     return (value & (value - 1)) == 0;
   }
 
