@@ -43,4 +43,17 @@ class TileTypes {
         value: randomValueFound,
         strValue: randomValueFound.toString());
   }
+
+  /// Function that returns true if the tile value exists in tiles possible
+  /// values and false otherwise.
+  /// This function is used to check if the tile value is valid.
+  static bool isTileValueValid(int value) {
+    return tiles.containsKey(value);
+  }
+
+  /// Function that returns true if the value is a power of 2 and false otherwise.
+  /// This function is used to check if the tile value is valid in the game.
+  static bool isValueValid(int value) {
+    return (value & (value - 1)) == 0;
+  }
 }

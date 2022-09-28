@@ -129,11 +129,8 @@ class ActionManager {
 
             widgetList[j] = StatefulColorfulTile.emptyTile(widgetList[j].key!);
 
-            widgetList[i] = StatefulColorfulTile(
-                key: widgetList[i].key,
-                color: TileTypes.tiles[resultValue]!,
-                value: resultValue,
-                strValue: resultValue.toString());
+            widgetList[i] = StatefulColorfulTile.fromValueTileWithKey(
+                widgetList[i].key!, resultValue);
           }
           break;
         }

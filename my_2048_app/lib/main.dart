@@ -196,14 +196,6 @@ class StatefulColorfulTile extends StatefulWidget {
   @override
   ColorfulTileState createState() => ColorfulTileState();
 
-  static StatefulColorfulTile fromValueTile(int value) {
-    return StatefulColorfulTile(
-        key: UniqueKey(),
-        color: TileTypes.tiles[value]!,
-        value: value,
-        strValue: value.toString());
-  }
-
   static StatefulColorfulTile emptyTile(Key key) {
     return StatefulColorfulTile(
       key: key,
@@ -211,6 +203,22 @@ class StatefulColorfulTile extends StatefulWidget {
       value: 0,
       strValue: "",
     );
+  }
+
+  static StatefulColorfulTile fromValueTileWithKey(Key key, int value) {
+    if (TileTypes.isTileValueValid(value) && TileTypes.isValueValid(value)) {
+      return StatefulColorfulTile(
+          key: key,
+          color: TileTypes.tiles[value]!,
+          value: value,
+          strValue: value.toString());
+    } else {
+      return StatefulColorfulTile(
+          key: key,
+          color: Colors.red,
+          value: value,
+          strValue: value.toString());
+    }
   }
 }
 
