@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_2048_app/grid_moved_result.dart';
@@ -231,13 +232,15 @@ class ColorfulTileState extends State<StatefulColorfulTile> {
             key: UniqueKey(),
             color: widget.color,
             alignment: Alignment.center,
-            child: Text(
+            child: AutoSizeText(
               widget.strValue,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              maxLines: 1,
+              presetFontSizes: const [50, 40, 20],
+              style: TextStyle(
                   decoration: TextDecoration.none,
                   fontSize: 50,
-                  color: Colors.black,
+                  color: TileTypes.getFontColor(widget.value),
                   backgroundColor: Colors.transparent),
             )));
   }

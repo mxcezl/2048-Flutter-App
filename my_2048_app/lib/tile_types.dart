@@ -56,4 +56,14 @@ class TileTypes {
   static bool isValueValid(int value) {
     return (value & (value - 1)) == 0;
   }
+
+  /// Function that returns the font color that should be shown on the tile
+  /// depending on the tile value.
+  /// Tiles with value 2 and 4 have a grey font color and white for the other tiles.
+  static Color getFontColor(int value) {
+    if (value == 2 || value == 4) {
+      return const Color.fromRGBO(116, 107, 98, 1);
+    }
+    return const Color.fromRGBO(245, 245, 237, 1);
+  }
 }
