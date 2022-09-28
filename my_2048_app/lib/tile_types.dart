@@ -1,5 +1,5 @@
-import 'dart:math' show Random;
 import 'package:flutter/material.dart';
+import 'dart:math' show Random;
 import 'tile.dart';
 
 class TileTypes {

@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'grid_moved_result.dart';
 import 'tile_manager.dart';
-import 'tile_types.dart';
 import 'main.dart';
 
 // ignore: library_prefixes

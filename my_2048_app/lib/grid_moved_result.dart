@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_2048_app/main.dart';
+import 'main.dart';
 
 class GridMovedResult {
   final int score;

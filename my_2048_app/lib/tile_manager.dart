@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'tile_types.dart';
 import 'main.dart';
 import 'tile.dart';
-import 'tile_types.dart';
 
 class TileManager {
   static StatefulColorfulTile generateTileForInit() {
