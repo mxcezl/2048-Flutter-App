@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_2048_app/grid_moved_result.dart';
 import 'package:my_2048_app/tile_types.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'action_manager.dart';
 import 'tile_manager.dart';
 
 // ignore: library_prefixes
 import 'constants.dart' as Constants;
+
+late SharedPreferences prefs;
+int bestScore = 0;
 
 Future<void> main() async {
   runApp(MaterialApp(
@@ -29,12 +33,26 @@ class HomePageGameState extends State<HomePageGame> {
   late List<Widget> tiles;
   static const int matriceSize = 4;
   int score = 0;
-  int bestScore = 0;
 
   @override
   void initState() {
     super.initState();
+    getBestScore();
     tiles = TileManager.generateInitList();
+  }
+
+  /// Function that gather the best score from the shared preferences.
+  getBestScore() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      bestScore = prefs.getInt(Constants.BEST_SCORE_KEY) ?? bestScore;
+    });
+  }
+
+  /// Function that updates the best score from the shared preferences.
+  updateBestScore() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setInt(Constants.BEST_SCORE_KEY, bestScore);
   }
 
   /// This function is called when the user swipe the screen.
@@ -49,6 +67,9 @@ class HomePageGameState extends State<HomePageGame> {
         score += result.score;
         if (score > bestScore) {
           bestScore = score;
+
+          // Updating the best score in local.
+          updateBestScore();
         }
       });
     }
