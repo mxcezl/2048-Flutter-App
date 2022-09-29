@@ -115,6 +115,7 @@ Toutes les sources logiques du projet se trouvent dans le dossier `my_2048_app/l
 
 - [ ] Ajout d'un bouton de retour en arrière
 - [ ] Ajout d'un bouton de pause
+- [ ] Possibilité de selectionner un profile utilisateur
 - [ ] Création d'un menu
 - [ ] Ajout d'un bouton de retour au menu
 - [ ] Ajout d'un bouton de reset du meilleur score
