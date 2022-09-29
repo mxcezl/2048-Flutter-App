@@ -23,7 +23,7 @@ Pour lancer le projet, il vous faudra installer Flutter sur votre machine. Pour 
 
 ![Android Studio](https://img.shields.io/badge/Android%20Studio-3DDC84.svg?style=for-the-badge&logo=android-studio&logoColor=white)
 
-Pour lancer l'émulateur Android, il vous faudra installer Android Studio sur votre machine. Pour cela, vous pouvez suivre le tutoriel disponible sur le site officiel de Flutter : [https://flutter.dev/docs/get-started/install/windows#android-setup](https://flutter.dev/docs/get-started/install/windows#android-setup)
+Pour lancer l'émulateur Android, il vous faudra installer Android Studio sur votre machine. Pour cela, vous pouvez suivre le tutoriel disponible sur le site officiel d'Android Studio : [https://developer.android.com/studio/install](https://developer.android.com/studio/install)
 
 ---
 
@@ -61,5 +61,60 @@ flutter run
 - [x] Affichage du meilleur score
 - [x] Persistence du meilleur score
 - [x] Affichage d'un pop-up lors de la fin de partie
-- [x] Bouton de reset
+- [x] Bouton de reset de partie
 - [x] Couleurs différentes pour chaque valeur de tuile
+- [x] Blocage des rotations du téléphone
+- [x] Comparaison de la grille avant et après mouvement
+- [x] Ajout d'une nouvelle tuile uniquement si changement de la grille
+
+## Découpage du projet
+
+Toutes les sources logiques du projet se trouvent dans le dossier `my_2048_app/lib`. Ce dossier contient les fichiers suivants :
+
+- `main.dart` : fichier principal du projet, il contient le code de lancement de l'application.
+- `constants.dart` : fichier contenant les constantes utilisées dans le projet.
+- `tile_types.dart` : fichier contenant les méthodes liées aux types de tuiles utilisées dans le projet.
+  - Listing des tuiles possibles
+  - Génération d'une tuile aléatoire
+  - Vérification de la valeur d'une tuile
+- `tile.dart` : fichier contenant la classe `Tile` qui représente une tuile.
+  - Stockage de la valeur de la tuile
+  - Stockage de la couleur de la tuile
+  - Stockage de la valeur à afficher sur la tuile
+- `tile_manager.dart` : fichier contenant la classe `TileManager` qui gère les widgets liés aux tuiles.
+  - Génération des widgets des tuiles
+  - Génération de la grille initiale (2 tuiles avec valeur 2 ou 4 et le reste vide)
+- `action_manager.dart` : fichier contenant la classe `ActionManager` qui gère les actions liées aux mouvements.
+  - Déplacement des tuiles
+  - Fusion des tuiles
+  - Génération d'une nouvelle tuile lors de la fusion
+  - Détéction de changement d'état de la grille
+  - Ajout d'une tuile après un mouvement
+  - Détection de la fin de partie
+- `grid_moved_result.dart` : fichier contenant la classe `GridMovedResult` qui représente le résultat d'un mouvement.
+  - Stocke l'état de la grille après le mouvement
+  - Stocke le score généré par le mouvement
+  - Stocke un booléen indiquant si la grille a changé
+  - Stocke un booléen indiquant si la partie est terminée
+
+## Screenshots
+
+### Initial state
+
+![Initial state](./screenshots/initial_state.png)
+
+### Mid game
+
+![Mid game](./screenshots/mid_game.png)
+
+### End game
+
+![End game](./screenshots/end_game.png)
+
+## Améliorations
+
+- [ ] Ajout d'un bouton de retour en arrière
+- [ ] Ajout d'un bouton de pause
+- [ ] Création d'un menu
+- [ ] Ajout d'un bouton de retour au menu
+- [ ] Ajout d'un bouton de reset du meilleur score
